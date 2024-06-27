@@ -8,8 +8,8 @@ public class HelloWorld {
         Javalin app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
         });
-        // Описываем, что загрузится по адресу /
-        app.get("/", ctx -> ctx.result("Hello World"));
+        app.get("/users", hnd -> hnd.result("GET /users"));
+        app.post("/users", hnd -> hnd.result("POST /users"));
         app.start(7070); // Стартуем веб-сервер
     }
 }
