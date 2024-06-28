@@ -25,7 +25,7 @@ public class HelloWorld {
                 Model model = new Model("Java #1", "New Course desc");
                 model.setId(1L);
                 DTO dto = new DTO(List.of(model), "This is My header");
-                ctx.render("index.jte", model("push", dto));
+                ctx.render("index.jte", model("dto", dto));
             } else {
                 throw new NotFoundResponse("This is bad id: " + id);
             }
