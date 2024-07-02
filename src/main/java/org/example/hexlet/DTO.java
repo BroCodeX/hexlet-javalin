@@ -10,5 +10,5 @@ import java.util.List;
 @Getter
 public class DTO {
     private List<Model> models;
-    private String header;
+    private String term;
 }
