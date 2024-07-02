@@ -3,6 +3,7 @@
 @param Content content
 @param Content mainLink
 @param Content footer
+@param Content id
 
 <!doctype html>
 <html lang="en">
@@ -20,6 +21,7 @@
 </nav>
 <div class="content">
     ${content}
+    <p>This is id: ${id}</p>
 </div>
 @if (footer != null)
     <div class="footer">
