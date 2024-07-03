@@ -47,4 +47,3 @@ tasks.test {
         showStandardStreams = true
     }
 }
-
