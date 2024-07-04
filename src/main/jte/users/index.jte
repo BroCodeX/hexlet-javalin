@@ -1,6 +1,11 @@
 @import exercise.dto.users.UsersPage
 @param UsersPage page
 
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
 @template.layout.page(
     content = @`
         <h1>Пользователи</h1>
@@ -23,3 +28,4 @@
         </table>
     `
 )
+</html>

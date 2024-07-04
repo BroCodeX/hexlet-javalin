@@ -1,5 +1,6 @@
 package exercise;
 
+import exercise.dto.users.BuildUserPage;
 import io.javalin.Javalin;
 import java.util.List;
 import static io.javalin.rendering.template.TemplateUtil.model;
@@ -7,6 +8,7 @@ import io.javalin.rendering.template.JavalinJte;
 import exercise.model.User;
 import exercise.dto.users.UsersPage;
 import exercise.repository.UserRepository;
+import io.javalin.validation.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 import exercise.util.Security;
 
@@ -26,13 +28,15 @@ public final class App {
         app.get("/users", ctx -> {
             List<User> users = UserRepository.getEntities();
             var page = new UsersPage(users);
+//            var page = new BuildUserPage();
             ctx.render("users/index.jte", model("page", page));
         });
 
         // BEGIN
         app.get("/users/build", context -> {
-            List<User> users = UserRepository.getEntities();
-            var page = new UsersPage(users);
+//            List<User> users = UserRepository.getEntities();
+//            var page = new UsersPage(users);
+            var page = new BuildUserPage();
             context.render("users/build.jte", model("page", page));
         });
 
@@ -40,11 +44,27 @@ public final class App {
             var firstName = StringUtils.capitalize(context.formParam("firstName"));
             var lastName = StringUtils.capitalize(context.formParam("lastName"));
             var email = context.formParam("email").trim().toLowerCase();
-            var password = context.formParam("password");
-            String passSec = Security.encrypt(password);
-            User user = new User(firstName, lastName, email, passSec);
-            UserRepository.save(user);
-            context.redirect("/users");
+
+            try {
+                String passwordConfirmation = context.formParam("passwordConfirmation");
+                String password = context.formParamAsClass("password", String.class)
+                        .check(pass -> pass.equals(passwordConfirmation), "Пароли не совпадают")
+                        .check(pass -> pass.length() >= 8, "Пароль не менее 8 символов")
+                        .get();
+                String passSec = Security.encrypt(password);
+                User user = new User(firstName, lastName, email, passSec);
+                UserRepository.save(user);
+                context.redirect("/users");
+            } catch (ValidationException ex) {
+                List<User> users = UserRepository.getEntities();
+                BuildUserPage page = new BuildUserPage(users, firstName, email, ex.getErrors());
+                context.render("users/build.jte", model("page", page));
+            }
+
+            //var password = context.formParam("password");
+
+
+
         });
         // END
 
