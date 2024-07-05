@@ -30,19 +30,17 @@ public final class App {
             ctx.render("index.jte");
         });
 
-        app.get("/u", ctx -> {
-            List<User> users = UserRepository.getEntities();
-            var page = new UsersPage(users);
-//            var page = new BuildUserPage();
-            ctx.render("users/index.jte", model("page", page));
-        });
+        app.get("/users", UsersController::index);
 
-        app.get("/u/build", context -> {
-            var page = new BuildUserPage();
-            context.render("users/build.jte", model("page", page));
-        });
+        app.get("/users/build", UsersController::build);
 
-        app.get("/u/{id}", context -> {
+        app.patch("/users/{id}", UsersController::update);
+
+        app.delete("/users/{id}", UsersController::destroy);
+
+        app.post("/users", UsersController::create);
+
+        app.get("/users/{id}", context -> {
             Long id = context.pathParamAsClass("id", Long.class)
                     .check(num -> num instanceof Long, "It's not long")
                     .get();
@@ -51,27 +49,6 @@ public final class App {
             context.result(user == null ? "User is null" : user.get().getFirstName());
         });
 
-        app.post("/u", context -> {
-            var firstName = StringUtils.capitalize(context.formParam("firstName"));
-            var lastName = StringUtils.capitalize(context.formParam("lastName"));
-            var email = context.formParam("email").trim().toLowerCase();
-
-            try {
-                String passwordConfirmation = context.formParam("passwordConfirmation");
-                String password = context.formParamAsClass("password", String.class)
-                        .check(pass -> pass.equals(passwordConfirmation), "Пароли не совпадают")
-                        .check(pass -> pass.length() >= 8, "Пароль не менее 8 символов")
-                        .get();
-                String passSec = Security.encrypt(password);
-                User user = new User(firstName, lastName, email, passSec);
-                UserRepository.save(user);
-                context.redirect("/u");
-            } catch (ValidationException ex) {
-                List<User> users = UserRepository.getEntities();
-                BuildUserPage page = new BuildUserPage(users, firstName, email, ex.getErrors());
-                context.render("users/build.jte", model("page", page));
-            }
-        });
         return app;
     }
 

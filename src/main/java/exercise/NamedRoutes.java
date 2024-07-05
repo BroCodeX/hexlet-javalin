@@ -2,11 +2,11 @@ package exercise;
 
 public class NamedRoutes {
     public static String usersPath() {
-        return "/u";
+        return "/users";
     }
 
     public static String usersBuildPath() {
-        return "/u/build";
+        return "/users/build";
     }
 
     public static String userPath(Long id) {
@@ -14,6 +14,6 @@ public class NamedRoutes {
     }
 
     public static String userPath(String id) {
-        return "/u/" + id;
+        return "/users/" + id;
     }
 }
