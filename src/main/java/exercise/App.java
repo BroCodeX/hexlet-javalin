@@ -37,10 +37,7 @@ public final class App {
             ctx.render("users/index.jte", model("page", page));
         });
 
-        // BEGIN
         app.get("/u/build", context -> {
-//            List<User> users = UserRepository.getEntities();
-//            var page = new UsersPage(users);
             var page = new BuildUserPage();
             context.render("users/build.jte", model("page", page));
         });
@@ -51,11 +48,6 @@ public final class App {
                     .get();
             var user = UserRepository.find(id);
             context.result("User is null");
-//            if (user == null || user.get() == null || user.isEmpty() || user.get().equals(null)) {
-//                context.result("User is null");
-//            } else {
-//                context.result(user.get().getFirstName());
-//            }
             context.result(user == null ? "User is null" : user.get().getFirstName());
         });
 
@@ -79,13 +71,7 @@ public final class App {
                 BuildUserPage page = new BuildUserPage(users, firstName, email, ex.getErrors());
                 context.render("users/build.jte", model("page", page));
             }
-            //var password = context.formParam("password");
-
-
-
         });
-        // END
-
         return app;
     }
 
