@@ -43,7 +43,7 @@ public class UsersController {
             String passSec = Security.encrypt(password);
             User user = new User(firstName, lastName, email, passSec);
             UserRepository.save(user);
-            context.redirect("/users");
+            context.redirect(NamedRoutes.usersPath());
         } catch (ValidationException ex) {
             List<User> users = UserRepository.getEntities();
             BuildUserPage page = new BuildUserPage(users, firstName, email, ex.getErrors());
