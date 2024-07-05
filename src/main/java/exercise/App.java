@@ -3,7 +3,12 @@ package exercise;
 import exercise.dto.users.BuildUserPage;
 import io.javalin.Javalin;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import static io.javalin.rendering.template.TemplateUtil.model;
+
+import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
 import exercise.model.User;
 import exercise.dto.users.UsersPage;
@@ -25,7 +30,7 @@ public final class App {
             ctx.render("index.jte");
         });
 
-        app.get("/users", ctx -> {
+        app.get("/u", ctx -> {
             List<User> users = UserRepository.getEntities();
             var page = new UsersPage(users);
 //            var page = new BuildUserPage();
@@ -33,14 +38,28 @@ public final class App {
         });
 
         // BEGIN
-        app.get("/users/build", context -> {
+        app.get("/u/build", context -> {
 //            List<User> users = UserRepository.getEntities();
 //            var page = new UsersPage(users);
             var page = new BuildUserPage();
             context.render("users/build.jte", model("page", page));
         });
 
-        app.post("/users", context -> {
+        app.get("/u/{id}", context -> {
+            Long id = context.pathParamAsClass("id", Long.class)
+                    .check(num -> num instanceof Long, "It's not long")
+                    .get();
+            var user = UserRepository.find(id);
+            context.result("User is null");
+//            if (user == null || user.get() == null || user.isEmpty() || user.get().equals(null)) {
+//                context.result("User is null");
+//            } else {
+//                context.result(user.get().getFirstName());
+//            }
+            context.result(user == null ? "User is null" : user.get().getFirstName());
+        });
+
+        app.post("/u", context -> {
             var firstName = StringUtils.capitalize(context.formParam("firstName"));
             var lastName = StringUtils.capitalize(context.formParam("lastName"));
             var email = context.formParam("email").trim().toLowerCase();
@@ -54,13 +73,12 @@ public final class App {
                 String passSec = Security.encrypt(password);
                 User user = new User(firstName, lastName, email, passSec);
                 UserRepository.save(user);
-                context.redirect("/users");
+                context.redirect("/u");
             } catch (ValidationException ex) {
                 List<User> users = UserRepository.getEntities();
                 BuildUserPage page = new BuildUserPage(users, firstName, email, ex.getErrors());
                 context.render("users/build.jte", model("page", page));
             }
-
             //var password = context.formParam("password");
 
 

@@ -1,5 +1,7 @@
+@import exercise.NamedRoutes
+
 @template.layout.page(
     content = @`
-        <a href="/users">Пользователи</a>
+        <a href="${NamedRoutes.usersPath()}">Пользователи</a>
     `
 )

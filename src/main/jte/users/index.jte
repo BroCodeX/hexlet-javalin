@@ -1,3 +1,4 @@
+@import exercise.NamedRoutes
 @import exercise.dto.users.UsersPage
 @param UsersPage page
 
@@ -11,7 +12,7 @@
         <h1>Пользователи</h1>
 
         <div class="mb-3">
-            <a href="/users/build">Зарегистрировать нового пользователя</a>
+            <a href="${NamedRoutes.usersBuildPath()}">Зарегистрировать нового пользователя</a>
         </div>
 
         <table class="table table-striped">
@@ -22,6 +23,9 @@
                     </td>
                     <td>
                         ${user.getFirstName()} ${user.getLastName()}
+                    </td>
+                    <td>
+                        <a href="${NamedRoutes.userPath(user.getId())}">${user.getLastName()}</a>
                     </td>
                 </tr>
             @endfor

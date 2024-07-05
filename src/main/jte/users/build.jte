@@ -1,3 +1,4 @@
+@import exercise.NamedRoutes
 @import exercise.dto.users.BuildUserPage
 @param BuildUserPage page
 
@@ -16,7 +17,7 @@
     </ul>
 @endif
 
-<form action="/users" method="post">
+<form action="${NamedRoutes.usersPath()}" method="post">
     <div>
         <label>
             First Name

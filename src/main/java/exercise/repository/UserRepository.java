@@ -26,7 +26,11 @@ public class UserRepository {
                 .filter(entity -> entity.getId().equals(id))
                 .findAny()
                 .orElse(null);
-        return Optional.of(user);
+        if (user == null) {
+            return null;
+        } else {
+            return Optional.of(user);
+        }
     }
 
     public static void delete(Long id) {
