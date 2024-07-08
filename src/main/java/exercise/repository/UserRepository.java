@@ -27,14 +27,16 @@ public class UserRepository {
                 .findAny()
                 .orElse(null);
         if (user == null) {
-            return null;
+            return Optional.empty();
         } else {
             return Optional.of(user);
         }
     }
 
     public static void delete(Long id) {
-
+        entities = entities.stream()
+                .filter(user -> !user.getId().equals(id))
+                .toList();
     }
 
     public static List<User> getEntities() {

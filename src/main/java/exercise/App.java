@@ -2,6 +2,8 @@ package exercise;
 
 import exercise.dto.users.BuildUserPage;
 import io.javalin.Javalin;
+
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -40,14 +42,9 @@ public final class App {
 
         app.post("/users", UsersController::create);
 
-        app.get("/users/{id}", context -> {
-            Long id = context.pathParamAsClass("id", Long.class)
-                    .check(num -> num instanceof Long, "It's not long")
-                    .get();
-            var user = UserRepository.find(id);
-            context.result("User is null");
-            context.result(user == null ? "User is null" : user.get().getFirstName());
-        });
+        app.get("/users/{id}", UsersController::show);
+
+        app.get("/users/{id}/edit", UsersController::edit);
 
         return app;
     }

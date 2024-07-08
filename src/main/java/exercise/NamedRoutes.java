@@ -16,4 +16,8 @@ public class NamedRoutes {
     public static String userPath(String id) {
         return "/users/" + id;
     }
+
+    public static String userEdit(Long id) {
+        return userPath(String.valueOf(id)) + "/edit";
+    }
 }
