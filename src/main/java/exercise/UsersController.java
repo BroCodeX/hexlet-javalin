@@ -1,6 +1,7 @@
 package exercise;
 
 import exercise.dto.users.BuildUserPage;
+import exercise.dto.users.UserPage;
 import exercise.dto.users.UsersPage;
 import exercise.model.User;
 import exercise.repository.UserRepository;
@@ -64,7 +65,8 @@ public class UsersController {
                 .get();
         var user = UserRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
-        UsersPage page = new UsersPage(List.of(user));
+        //UsersPage page = new UsersPage(List.of(user));
+        UserPage page = new UserPage(user);
         context.render("users/edit.jte", model("page", page));
     }
 
@@ -91,7 +93,7 @@ public class UsersController {
             user.setEmail(email);
             user.setPassword(passSec);
 
-//            UserRepository.save(user);
+            UserRepository.save(user);
             context.redirect(NamedRoutes.usersPath());
         } catch (ValidationException ex) {
             List<User> users = UserRepository.getEntities();
@@ -101,10 +103,15 @@ public class UsersController {
     }
 
     public static void destroy(Context context) {
-        Long id = context.pathParamAsClass("id", Long.class)
-                .check(num -> num instanceof Long, "It's not long")
-                .get();
-        UserRepository.delete(id);
-        context.redirect(NamedRoutes.usersPath());
+        try {
+            Long id = context.pathParamAsClass("id", Long.class)
+                    .check(num -> num instanceof Long, "It's not long")
+                    .get();
+            UserRepository.delete(id);
+            context.redirect(NamedRoutes.usersPath());
+        } catch (ValidationException ex) {
+            context.result(ex.getMessage());
+        }
+
     }
 }
