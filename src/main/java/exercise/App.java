@@ -1,23 +1,10 @@
 package exercise;
 
-import exercise.dto.users.BuildUserPage;
 import io.javalin.Javalin;
-
-import java.sql.ResultSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import static io.javalin.rendering.template.TemplateUtil.model;
-
-import io.javalin.http.NotFoundResponse;
+import exercise.controller.PostsController;
+import exercise.controller.RootController;
+import exercise.util.NamedRoutes;
 import io.javalin.rendering.template.JavalinJte;
-import exercise.model.User;
-import exercise.dto.users.UsersPage;
-import exercise.repository.UserRepository;
-import io.javalin.validation.ValidationException;
-import org.apache.commons.lang3.StringUtils;
-import exercise.util.Security;
 
 public final class App {
 
@@ -28,23 +15,18 @@ public final class App {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get("/", ctx -> {
-            ctx.render("index.jte");
-        });
+        app.get(NamedRoutes.rootPath(), RootController::index);
 
-        app.get("/users", UsersController::index);
+        app.get(NamedRoutes.buildPostPath(), PostsController::build);
+        app.post(NamedRoutes.postsPath(), PostsController::create);
 
-        app.get("/users/build", UsersController::build);
+        app.get(NamedRoutes.postsPath(), PostsController::index);
+        app.get(NamedRoutes.postPath("{id}"), PostsController::show);
 
-        app.patch("/users/{id}", UsersController::update);
-
-        app.delete("/users/{id}", UsersController::destroy);
-
-        app.post("/users", UsersController::create);
-
-        app.get("/users/{id}", UsersController::show);
-
-        app.get("/users/{id}/edit", UsersController::edit);
+        // BEGIN
+        app.get(NamedRoutes.editPost("{id}"), PostsController::edit);
+        app.post(NamedRoutes.update("{id}"), PostsController::update);
+        // END
 
         return app;
     }

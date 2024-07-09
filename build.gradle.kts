@@ -33,7 +33,6 @@ dependencies {
     testImplementation("com.konghq:unirest-java:3.13.0")
     testImplementation("org.hamcrest:hamcrest-core:2.2")
     testImplementation("org.assertj:assertj-core:3.24.2")
-    implementation("org.apache.commons:commons-lang3:3.13.0")
 }
 
 tasks.test {
@@ -47,3 +46,4 @@ tasks.test {
         showStandardStreams = true
     }
 }
+
