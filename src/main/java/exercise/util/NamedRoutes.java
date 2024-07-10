@@ -22,7 +22,6 @@ public class NamedRoutes {
         return "/posts/" + id;
     }
 
-    // BEGIN
     public static String editPost(Long id) {
         return postPath(id) + "/edit";
     }
@@ -34,5 +33,11 @@ public class NamedRoutes {
     public static String update(String id) {
         return postPath(id);
     }
-    // END
+
+    public static String sessionsPath() {
+        return "/sessions";
+    }
+    public static String sessionsPathBuild() {
+        return sessionsPath() + "/build";
+    }
 }

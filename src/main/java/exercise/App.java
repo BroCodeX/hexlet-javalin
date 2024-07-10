@@ -1,5 +1,6 @@
 package exercise;
 
+import exercise.controller.SessionsController;
 import io.javalin.Javalin;
 import exercise.controller.PostsController;
 import exercise.controller.RootController;
@@ -26,6 +27,13 @@ public final class App {
         // BEGIN
         app.get(NamedRoutes.editPost("{id}"), PostsController::edit);
         app.post(NamedRoutes.update("{id}"), PostsController::update);
+
+        // Отображение формы логина
+        app.get(NamedRoutes.sessionsPathBuild(), SessionsController::build);
+        // Процесс логина
+        app.post(NamedRoutes.sessionsPath(), SessionsController::create);
+        // Процесс выхода из аккаунта
+        app.delete(NamedRoutes.sessionsPath(), SessionsController::destroy);
         // END
 
         return app;

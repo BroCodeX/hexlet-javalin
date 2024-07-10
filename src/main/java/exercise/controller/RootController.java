@@ -7,7 +7,8 @@ import io.javalin.http.Context;
 public class RootController {
     public static void index(Context ctx) {
         Boolean cookieVisited = Boolean.valueOf(ctx.cookie("visited"));
-        MainPage page = new MainPage(cookieVisited);
+        String session = ctx.sessionAttribute("currentUser");
+        MainPage page = new MainPage(session, cookieVisited);
         ctx.cookie("visited", String.valueOf(true));
         ctx.render("index.jte", model("page", page));
     }
