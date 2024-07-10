@@ -1,9 +1,14 @@
 package exercise.controller;
+import static io.javalin.rendering.template.TemplateUtil.model;
 
+import exercise.dto.posts.MainPage;
 import io.javalin.http.Context;
 
 public class RootController {
     public static void index(Context ctx) {
-        ctx.render("index.jte");
+        Boolean cookieVisited = Boolean.valueOf(ctx.cookie("visited"));
+        MainPage page = new MainPage(cookieVisited);
+        ctx.cookie("visited", String.valueOf(true));
+        ctx.render("index.jte", model("page", page));
     }
 }
