@@ -1,5 +1,7 @@
+@import exercise.dto.posts.BasePage
 @import gg.jte.Content
 @param Content content
+@param BasePage page = null
 
 <html lang="en">
   <head>
@@ -12,6 +14,9 @@
     <title>Hello Hexlet!</title>
     </head>
     <body>
+    @if(page != null && page.getFlash() != null)
+      <p>${page.getFlash()}</p>
+    @endif
         ${content}
     </body>
 </html>

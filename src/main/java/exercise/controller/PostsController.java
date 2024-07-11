@@ -32,6 +32,7 @@ public class PostsController {
 
             var post = new Post(name, body);
             PostRepository.save(post);
+            ctx.sessionAttribute("flash", "Course has been created!");
             ctx.redirect(NamedRoutes.postsPath());
 
         } catch (ValidationException e) {
@@ -45,6 +46,7 @@ public class PostsController {
     public static void index(Context ctx) {
         var posts = PostRepository.getEntities();
         var postPage = new PostsPage(posts);
+        postPage.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("posts/index.jte", model("page", postPage));
     }
 

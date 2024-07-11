@@ -7,6 +7,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class PostsPage {
+public class PostsPage extends BasePage {
     private List<Post> posts;
 }

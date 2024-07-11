@@ -30,7 +30,7 @@ public final class JteindexGenerated {
 				}
 				jteOutput.writeContent("\n            </main>\n        </div>\n    ");
 			}
-		});
+		}, null);
 		jteOutput.writeContent("\n");
 	}
 	public static void renderMap(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, java.util.Map<String, Object> params) {
